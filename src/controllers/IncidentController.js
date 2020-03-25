@@ -16,6 +16,8 @@ module.exports = {
     },
 
     async index(req, res) {
+        const incidents = await connection('incidents').select('*');
 
+        res.json(incidents);
     }
 }
