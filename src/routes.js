@@ -4,6 +4,11 @@ const connection = require('./database/connection');
 
 const routes = express.Router();
 
+routes.get('/ongs', async function(req, res){ 
+    const ongs = await connection('ongs').select('*');
+
+    return res.json(ongs);
+});
 
 routes.post('/ongs', async function(req, res){
     const { name, email, whatsapp, city, uf } = req.body;
@@ -21,6 +26,7 @@ routes.post('/ongs', async function(req, res){
 
     return res.json({ id });
 });
+
 
 
 
