@@ -1,6 +1,23 @@
 const connection = require('../database/connection');
 
 module.exports = {
+    async index(req, res) {
+
+        const { page = 1 } = req.query;
+
+        const [count] = await connection('incidents').count();
+
+        const incidents = await connection('incidents')
+        .limit(5)
+        .offset((page-1) * 5)
+        .select('*');
+
+        res.header('X-Total-Count', count['count(*)']);
+
+        res.json(incidents);
+    },
+  
+  
     async create(req, res) {
         const { title, description, value } = req.body;
         const ong_id = req.headers.authorization;
@@ -15,11 +32,7 @@ module.exports = {
         return res.json({ id });
     },
 
-    async index(req, res) {
-        const incidents = await connection('incidents').select('*');
 
-        res.json(incidents);
-    },
 
     async delete(req, res){
         const { id } = req.params;
